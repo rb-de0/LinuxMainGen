@@ -92,12 +92,30 @@
         }
       },
       {
+        "package": "SwiftLint",
+        "repositoryURL": "https://github.com/realm/SwiftLint.git",
+        "state": {
+          "branch": null,
+          "revision": "c875bed8135517288fd89c072c0a316b4cdedb74",
+          "version": "0.25.0"
+        }
+      },
+      {
         "package": "SwiftShell",
         "repositoryURL": "https://github.com/kareman/SwiftShell.git",
         "state": {
           "branch": null,
           "revision": "433f28116691a1f19863990924e800e40d5d590c",
           "version": "3.0.1"
+        }
+      },
+      {
+        "package": "SwiftyTextTable",
+        "repositoryURL": "https://github.com/scottrhoyt/SwiftyTextTable.git",
+        "state": {
+          "branch": null,
+          "revision": "89728970c0a244c43f29c4155a1b1dc20b3c4633",
+          "version": "0.8.0"
         }
       },
       {

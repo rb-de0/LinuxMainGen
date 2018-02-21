@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "LinuxMainGen",
+    products: [
+        .executable(name: "linuxmain-gen", targets: ["LinuxMainGen"])
+    ],
     dependencies: [
         .package(url: "https://github.com/kareman/Moderator.git", .upToNextMajor(from: "0.4.3")),
         .package(url: "https://github.com/kareman/FileSmith.git", .upToNextMajor(from: "0.1.6")),
