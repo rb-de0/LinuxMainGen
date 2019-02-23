@@ -35,8 +35,9 @@ final class SourceParser {
         
         for file in files {
             let structure = try Structure(file: file)
-            if let classInFile = structure.class(parentClasses: testCaseParentClasses), let className = classInFile.name {
-                testClasses.append(TestClass(file: file, name: className, testCases: classInFile.testCases()))
+            let scopes = structure.scopes(parentClasses: testCaseParentClasses)
+            if let className = scopes.first?.name {
+                testClasses.append(TestClass(file: file, name: className, testCases: scopes.flatMap { $0.testCases() }))
             }
         }
         

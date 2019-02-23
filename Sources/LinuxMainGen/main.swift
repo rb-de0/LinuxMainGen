@@ -26,7 +26,7 @@ do {
     let testPackages = testDir.directories()
     
     // parse
-    let sourceFiles = files.flatMap { SourceKittenFramework.File(path: $0.absoluteString) }
+    let sourceFiles = files.compactMap { SourceKittenFramework.File(path: $0.absoluteString) }
     let parentClasses = try SourceParser.parentClassForTests(files: sourceFiles)
     let testClasses = try SourceParser.parse(files: sourceFiles, testCaseParentClasses: parentClasses)
     

@@ -4,7 +4,7 @@ extension Structure {
     
     var substructure: [[String: SourceKitRepresentable]] {
         let substructure = dictionary["key.substructure"] as? [SourceKitRepresentable] ?? []
-        return substructure.flatMap { $0 as? [String: SourceKitRepresentable] }
+        return substructure.compactMap { $0 as? [String: SourceKitRepresentable] }
     }
     
     var name: String? {
@@ -45,11 +45,11 @@ extension Structure {
     
     var inheritedTypes: [String] {
         let types = dictionary["key.inheritedtypes"] as? [[String: SourceKitRepresentable]] ?? []
-        return types.flatMap { Structure(sourceKitResponse: $0).name }
+        return types.compactMap { Structure(sourceKitResponse: $0).name }
     }
     
     var attributes: [String] {
         let attributes = dictionary["key.attributes"] as? [[String: SourceKitRepresentable]] ?? []
-        return attributes.flatMap { Structure(sourceKitResponse: $0).attribute }
+        return attributes.compactMap { Structure(sourceKitResponse: $0).attribute }
     }
 }

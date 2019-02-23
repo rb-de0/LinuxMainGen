@@ -21,29 +21,67 @@ extension Structure {
     var isAllTestsExtension: Bool {
         
         return substructure
-            .flatMap { Structure(sourceKitResponse: $0) }
+            .compactMap { Structure(sourceKitResponse: $0) }
             .contains(where: { $0.name == "allTests" })
     }
     
     func `extension`() -> Structure? {
         
         return substructure
-            .flatMap { Structure(sourceKitResponse: $0) }
+            .compactMap { Structure(sourceKitResponse: $0) }
             .first(where: { $0.isExtension })
     }
     
     func `class`(parentClasses: [String]) -> Structure? {
         
-        return substructure
-            .flatMap { Structure(sourceKitResponse: $0) }
-            .first(where: { $0.isClass && $0.inheritedTypes.contains(where: { parentClasses.contains($0) }) })
+        guard let firstClass = Structure.classInStructure(self) else {
+            return nil
+        }
+        
+        if firstClass.inheritedTypes.contains(where: { parentClasses.contains($0) }) {
+            return firstClass
+        } else {
+            guard let nestedClass = Structure.classInStructure(firstClass) else {
+                return nil
+            }
+            guard nestedClass.inheritedTypes.contains(where: { parentClasses.contains($0) }) else {
+                return nil
+            }
+            guard let firstClassName = firstClass.name,
+                let nestedClassName = nestedClass.name else {
+                return nil
+            }
+            var nestedStructure = nestedClass.dictionary
+            nestedStructure["key.name"] = [firstClassName, nestedClassName].joined(separator: ".")
+            return Structure(sourceKitResponse: nestedStructure)
+        }
+    }
+    
+    func scopes(parentClasses: [String]) -> [Structure] {
+        return Structure.scopesInStructure(self)
     }
     
     func testCases() -> [String] {
         
         return substructure
-            .flatMap { Structure(sourceKitResponse: $0) }
+            .compactMap { Structure(sourceKitResponse: $0) }
             .filter { $0.isTestFunction }
-            .flatMap { $0.name?.replacingOccurrences(of: "()", with: "") }
+            .compactMap { $0.name?.replacingOccurrences(of: "()", with: "") }
+    }
+    
+    static func classInStructure(_ structure: Structure) -> Structure? {
+        
+        return structure
+            .substructure
+            .compactMap { Structure(sourceKitResponse: $0) }
+            .first(where: { $0.isClass })
+    }
+    
+    static func scopesInStructure(_ structure: Structure) -> [Structure] {
+        
+        return structure
+            .substructure
+            .compactMap { Structure(sourceKitResponse: $0) }
+            .filter { $0.isClass || $0.isExtension }
     }
 }
